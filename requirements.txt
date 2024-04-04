@@ -1,0 +1,5 @@
+Flask==2.0.1
+Flask-WTF==0.15.1
+Flask-Limiter==1.4
+Flask-CORS==3.0.10
+Gunicorn==20.1.0
