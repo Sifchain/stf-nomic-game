@@ -1,4 +1,11 @@
-import random
+import os
+from flask import Flask
+from config import DevelopmentConfig, ProductionConfig
+
+app = Flask(__name__)
+
+env_config = DevelopmentConfig if os.getenv('FLASK_ENV') == 'development' else ProductionConfig
+app.config.from_object(env_config)
 
 class NomicGame:
     def __init__(self, player_names):
