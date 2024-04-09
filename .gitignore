@@ -1,0 +1,8 @@
+# ignore file for poetry / python / flash project
+#
+
+# Ignore the poetry cache
+__pycache__/
+
+# Ignore the poetry virtual environment
+.venv/
