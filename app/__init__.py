@@ -1,7 +1,7 @@
 from flask import Flask
 import os
 
-app = Flask(__name__)
-app.config.from_object('config.' + os.getenv('FLASK_ENV', 'DevelopmentConfig'))
+app = Flask(__name__, instance_relative_config=True)
+# app.config.from_object('config')
 
 from .routes import *
