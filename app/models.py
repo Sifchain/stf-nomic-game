@@ -1,24 +1,38 @@
-# Models for Nomic game entities
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
-from django.db import models
+db = SQLAlchemy()
 
+class Player(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    score = db.Column(db.Integer, default=0)
+    # Relationship to Game
+    game_id = db.Column(db.Integer, db.ForeignKey('game.id'), nullable=True)
+    game = db.relationship('Game', back_populates='players')
 
-class Player(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    score = models.IntegerField(default=0)
+    def __repr__(self):
+        return f'<Player {self.name}>'
 
-    def __str__(self):
-        return self.name
+class Rule(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.Text, nullable=False)
+    is_active = db.Column(db.Boolean, default=True)
+    # Relationship to Game
+    game_id = db.Column(db.Integer, db.ForeignKey('game.id'), nullable=False)
+    game = db.relationship('Game', back_populates='rules')
 
+    def __repr__(self):
+        return f'<Rule {self.description[:30]}>...'
 
-class GameState(models.Model):
-    state = models.JSONField()
-    active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+class Game(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    state = db.Column(db.JSON, nullable=True)  # This can store a JSON representation of the game state if needed
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+    # Relationships
+    players = db.relationship('Player', back_populates='game', lazy='dynamic')
+    rules = db.relationship('Rule', back_populates='game', lazy='dynamic')
 
-    def __str__(self):
-        return f'State {self.id} - Active: {self.active}'
-
-# Future models and game entities can be added here.
+    def __repr__(self):
+        return f'<Game {self.id}>'
