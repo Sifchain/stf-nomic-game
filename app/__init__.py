@@ -1,6 +1,7 @@
 from flask import Flask
+import os
 
 app = Flask(__name__)
-app.config['DEBUG'] = True
+app.config.from_object('config.' + os.getenv('FLASK_ENV', 'DevelopmentConfig'))
 
-from . import routes
+from .routes import *
