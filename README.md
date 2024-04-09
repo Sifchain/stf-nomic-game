@@ -14,3 +14,14 @@ source venv/bin/activate
 ```
 venv\Scripts\activate
 ```
+### Installing Dependencies
+After activating the virtual environment, install the required dependencies by running:
+```
+pip install -r requirements.txt
+```
+
+### Running the Flask Server
+To start the Flask server, run the following command:
+```
+flask run
+```
