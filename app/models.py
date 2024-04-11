@@ -1,10 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
-# set SQLAlchemy to use sqlite database file
-SQLALCHEMY_DATABASE_URI = 'sqlite:///app_database.db'
-
-db = SQLAlchemy(engine_options={'url': SQLALCHEMY_DATABASE_URI})
+db = SQLAlchemy()
 
 class Player(db.Model):
     id = db.Column(db.Integer, primary_key=True)
