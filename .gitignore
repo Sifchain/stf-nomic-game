@@ -6,3 +6,6 @@ __pycache__/
 
 # Ignore the poetry virtual environment
 .venv/
+
+# Ignore skip suffixed files
+*-skip
