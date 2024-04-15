@@ -9,3 +9,6 @@ __pycache__/
 
 # Ignore skip suffixed files
 *-skip
+
+# Ignore dot env files
+.env

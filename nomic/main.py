@@ -1,8 +1,11 @@
-from . import app
-from .routes import router
+from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 
-app.include_router(router)
+from . import app
+from .routes import router as api_router
+
+# Load environment variables
+load_dotenv()
 
 # Add CORS middleware
 origins = [
@@ -17,7 +20,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Include routes
+app.include_router(api_router)
+
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    try:
+        uvicorn.run(app, host="0.0.0.0", port=8000)
+    except KeyboardInterrupt:
+        print("Exiting...")
