@@ -20,7 +20,7 @@ def create_access_token(data: dict):
         to_encode["sub"] = str(to_encode["sub"])  # Convert UUID to string
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)  # type: ignore
     return encoded_jwt
 
 
