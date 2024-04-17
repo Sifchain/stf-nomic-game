@@ -2,6 +2,7 @@ import json
 
 from fastapi import APIRouter, Depends
 
+from nomic.database.models.user import User
 from nomic.routes.ws import broadcast_message
 from nomic.utils.jwt_handler import get_current_user
 
@@ -13,7 +14,7 @@ async def vote_rule_change(
     game_id: str,
     change_id: str,
     vote: str,
-    current_user: str = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ):
     # update the vote tally in database
 
@@ -23,6 +24,7 @@ async def vote_rule_change(
         "game_id": game_id,
         "change_id": change_id,
         "vote": vote,
+        "voted_by": str(current_user.id),
     }
 
     # Broadcast the vote to all WebSocket clients
@@ -33,7 +35,7 @@ async def vote_rule_change(
                 "game_id": game_id,
                 "change_id": change_id,
                 "vote": vote,
-                "voted_by": current_user,
+                "voted_by": str(current_user.id),
             }
         )
     )

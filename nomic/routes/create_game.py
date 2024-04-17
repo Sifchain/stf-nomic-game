@@ -3,6 +3,7 @@ from uuid import uuid4
 
 from fastapi import APIRouter, Depends
 
+from nomic.database.models.user import User
 from nomic.routes.ws import broadcast_message
 from nomic.utils.jwt_handler import get_current_user
 
@@ -11,7 +12,7 @@ router = APIRouter()
 
 @router.post("/create-game")
 async def create_game(
-    game_name: str, initial_rules: dict, current_user: str = Depends(get_current_user)
+    game_name: str, initial_rules: dict, current_user: User = Depends(get_current_user)
 ):
     game_id = str(uuid4())
     # Implementation for saving to DB here...
