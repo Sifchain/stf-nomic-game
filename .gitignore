@@ -2,6 +2,9 @@
 #
 
 # Ignore the poetry cache
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
 __pycache__/
 
 # Ignore the poetry virtual environment
@@ -9,3 +12,6 @@ __pycache__/
 
 # Ignore skip suffixed files
 *-skip
+
+# Ignore dot env files
+.env

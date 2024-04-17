@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# Save the list of added .py files
+added_py_files=$(git diff --name-only --cached --diff-filter=d | grep '\.py$')
+
+# Check if there are any Python files to format or lint
+if [ -z "$added_py_files" ]; then
+    echo "No Python files to format or lint."
+    exit 0
+fi
+
+# Perform formatting on staged files
+make format ${added_py_files}
+
+# Add formatted files back to staging
+git add ${added_py_files}
+
+# Run linting on staged files
+make lint ${added_py_files}
+
+# Check the status of linting
+if [ $? -ne 0 ]; then
+    echo "Linting failed, commit blocked."
+    exit 1
+fi
+
+# Continue with the commit if linting passed
+exit 0

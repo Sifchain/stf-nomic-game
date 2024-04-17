@@ -16,6 +16,9 @@ init:
 	@echo 'Installing dependencies'
 	poetry install
 
+start:
+	python -m nomic.main
+
 start-db:
 	docker run -p 5432:5432 --name nomic-db -e POSTGRES_PASSWORD=$$DB_PASSWORD -d postgres
 
