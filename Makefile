@@ -19,6 +19,12 @@ init:
 start:
 	python -m nomic.main
 
+reset-db:
+	psql -U $(USER) -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='nomic';"
+	psql -U $(USER) -d postgres -c "DROP DATABASE IF EXISTS nomic;"
+	psql -U $(USER) -d postgres -c "CREATE DATABASE nomic;"
+	alembic upgrade head
+
 start-db:
 	docker run -p 5432:5432 --name nomic-db -e POSTGRES_PASSWORD=$$DB_PASSWORD -d postgres
 
@@ -69,6 +75,9 @@ help:
 	@echo 'format              - run code formatters'
 	@echo 'lint                - run linters'
 	@echo 'init                - install pre-commit hooks and dependencies'
+	@echo 'start               - start the application'
+	@echo 'reset-db            - reset the database'
+	@echo 'migrate-db          - migrate the database'
 	@echo 'start_db            - start postgres db'
 	@echo 'build-docker        - build docker image'
 	@echo 'run-docker          - run docker image'

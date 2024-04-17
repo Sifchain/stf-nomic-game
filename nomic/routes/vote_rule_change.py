@@ -9,7 +9,7 @@ from nomic.utils.jwt_handler import get_current_user
 router = APIRouter()
 
 
-@router.post("/vote-rule-change/{game_id}/{change_id}")
+@router.post("/game/{game_id}/vote-rule-change/{change_id}")
 async def vote_rule_change(
     game_id: str,
     change_id: str,

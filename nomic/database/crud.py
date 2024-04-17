@@ -5,6 +5,7 @@ from typing import Optional
 from sqlalchemy.orm import Session
 
 from nomic.database import SessionLocal, engine
+from nomic.database.models.game import Game
 from nomic.database.models.user import User
 
 
@@ -55,3 +56,26 @@ def create_user(db: Session, username: str, hashed_password: str) -> User:
     db.commit()
     db.refresh(user)
     return user
+
+
+def create_game(db: Session, game_name: str) -> Game:
+    game = Game(name=game_name, status="CREATED")
+    db.add(game)
+    db.commit()
+    db.refresh(game)
+    return game
+
+
+def get_game_by_id(db: Session, game_id: str) -> Game | None:
+    return db.query(Game).get(game_id)
+
+
+def check_player_in_game(game: Game, player: User) -> bool:
+    return player in game.players
+
+
+def add_player_to_game(db: Session, game: Game, player: User) -> Game:
+    game.players.append(player)
+    db.commit()
+    db.refresh(game)
+    return game

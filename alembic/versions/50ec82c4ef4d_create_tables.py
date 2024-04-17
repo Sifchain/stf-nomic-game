@@ -41,7 +41,13 @@ def upgrade() -> None:
             primary_key=True,
             default=sa.text("uuid_generate_v4()"),
         ),
-        sa.Column("state", sa.JSON(), nullable=True),
+        sa.Column("name", sa.String(), nullable=False),
+        sa.Column(
+            "status",
+            sa.Enum("CREATED", "STARTED", "ENDED", name="game_statuses"),
+            nullable=False,
+            default="CREATED",
+        ),
         sa.Column(
             "created_at",
             sa.DateTime(),
@@ -105,4 +111,5 @@ def downgrade() -> None:
     op.drop_table("users")
     op.drop_table("rules")
     op.drop_table("games")
+    op.drop_table("game_players")
     # ### end Alembic commands ###

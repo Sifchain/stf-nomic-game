@@ -1,8 +1,9 @@
 import json
-from uuid import uuid4
 
 from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 
+from nomic.database import crud
 from nomic.database.models.user import User
 from nomic.routes.ws import broadcast_message
 from nomic.utils.jwt_handler import get_current_user
@@ -10,17 +11,19 @@ from nomic.utils.jwt_handler import get_current_user
 router = APIRouter()
 
 
-@router.post("/create-game")
+@router.post("/game/create")
 async def create_game(
-    game_name: str, initial_rules: dict, current_user: User = Depends(get_current_user)
+    game_name: str,
+    initial_rules: dict,
+    db: Session = Depends(crud.get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    game_id = str(uuid4())
-    # Implementation for saving to DB here...
+    game = crud.create_game(db, game_name)
 
     game_details = {
         "message": "Game created successfully",
-        "game_id": game_id,
-        "game_name": game_name,
+        "game_id": str(game.id),
+        "game_name": game.name,
         "initial_rules": initial_rules,
         "current_user": current_user,
     }
@@ -31,7 +34,7 @@ async def create_game(
             {
                 "event_type": "create_game",
                 "game_name": game_name,
-                "game_id": game_id,
+                "game_id": str(game.id),
                 "initial_rules": initial_rules,
             }
         )
