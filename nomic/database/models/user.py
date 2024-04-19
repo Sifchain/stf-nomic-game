@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import UUID, Column, Integer, String
+from sqlalchemy import UUID, Column, String
 from sqlalchemy.orm import relationship
 
 from nomic.database import Base

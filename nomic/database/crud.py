@@ -2,7 +2,6 @@ from contextlib import contextmanager
 from datetime import datetime
 from typing import List, Optional
 
-from sqlalchemy import insert
 from sqlalchemy.orm import Session
 
 from nomic.database import SessionLocal, engine
@@ -206,10 +205,10 @@ def end_turn(
 
     # Check win condition
     if actions_match:
-        game_player.score += score
+        game_player.score += score  # type: ignore
 
         if game_player.score >= 100:
-            game.status = "ENDED"
+            game.status = "ENDED"  # type: ignore
             game.winner_id = game_player.user_id
 
     # Rotate turn to the next player
@@ -217,7 +216,7 @@ def end_turn(
     current_index = players.index(game_player)  # type: ignore
     next_index = (current_index + 1) % len(players)
     game.current_player_id = players[next_index].user_id
-    game.current_turn += 1
+    game.current_turn += 1  # type: ignore
 
     db.commit()
     db.refresh(game)
@@ -231,7 +230,10 @@ def take_action(db: Session, game_id: str, rule_id: str, user_id: str) -> None:
 
     # Record the action
     player_action = PlayerAction(
-        game_id=game_id, user_id=user_id, rule_id=rule_id, turn=game.current_turn
+        game_id=str(game_id),
+        user_id=str(user_id),
+        rule_id=str(rule_id),
+        turn=game.current_turn if game else 0,
     )
     db.add(player_action)
     db.commit()

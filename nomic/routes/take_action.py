@@ -44,7 +44,7 @@ async def take_action(
     if rule.game_id != game.id:
         raise HTTPException(status_code=404, detail="Rule not active in the game")
 
-    crud.take_action(db, game_id, rule_id, current_user.id)
+    crud.take_action(db, game_id, rule_id, str(current_user.id))
 
     # Create the response detail
     take_action_details = {

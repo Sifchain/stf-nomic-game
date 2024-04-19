@@ -33,14 +33,14 @@ async def end_turn(
         .first()
     )
 
-    _, _, score = crud.end_turn(db, game, game_player)
+    _, _, score = crud.end_turn(db, game, game_player)  # type: ignore
 
     details = {
         "message": "Turn ended and votes processed",
         "game_id": game_id,
         "old_player_id": f"{current_user.id}",
         "new_player_id": f"{game.current_player_id}",
-        "new_score": game_player.score,
+        "new_score": int(game_player.score) if game_player else 0,
         "dice_score": score,
     }
 
@@ -52,7 +52,7 @@ async def end_turn(
                 "game_id": game_id,
                 "old_player_id": f"{current_user.id}",
                 "new_player_id": f"{game.current_player_id}",
-                "new_score": game_player.score,
+                "new_score": int(game_player.score) if game_player else 0,
                 "dice_score": score,
             }
         )
