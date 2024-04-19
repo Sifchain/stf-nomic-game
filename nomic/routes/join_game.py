@@ -17,6 +17,10 @@ async def join_game(
     db: Session = Depends(crud.get_db),
     current_user: User = Depends(get_current_user),
 ):
+    """
+    Add the current user to the game with the provided game_id.
+    """
+
     # Check if the game exists and add the player to the game
     game = crud.get_game_by_id(db, game_id)
 
@@ -33,7 +37,7 @@ async def join_game(
             status_code=400, detail="Cannot join game, as it is not in CREATED status."
         )
 
-    crud.add_player_to_game(db, game, current_user)
+    crud.join_game(db, game, current_user)
 
     join_details = {
         "message": "Joined the game successfully",

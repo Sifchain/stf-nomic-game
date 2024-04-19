@@ -19,6 +19,9 @@ init:
 start:
 	python -m nomic.main
 
+start-watch:
+	DEBUG=1 python -m nomic.main
+
 reset-db:
 	psql -U $(USER) -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='nomic';"
 	psql -U $(USER) -d postgres -c "DROP DATABASE IF EXISTS nomic;"

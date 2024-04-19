@@ -16,3 +16,6 @@ class User(Base):
 
     # Link to games through the game_players association table
     games = relationship("Game", secondary="game_players", back_populates="players")
+
+    # Relationship to RuleProposalVote model
+    rule_proposal_votes = relationship("RuleProposalVote", back_populates="user")
