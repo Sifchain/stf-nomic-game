@@ -36,7 +36,9 @@ RUN apt-get update \
     # deps for building python deps
     build-essential \
     # install git
-    git
+    git \
+    # install postgresql client
+    postgresql-client
 
 RUN curl -sSL https://install.python-poetry.org | python3 -
 
