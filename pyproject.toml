@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
-package-mode = false
+# package-mode = false
 
 [tool.poetry.scripts]
 start = "uvicorn app.main:app --reload"
@@ -21,6 +21,7 @@ websockets = "^12.0"
 pyjwt = "^2.8.0"
 python-multipart = "^0.0.9"
 types-passlib = "^1.7.7.20240327"
+psycopg2-binary = "^2.9.9"
 
 [tool.poetry.dev-dependencies]
 pytest = "^8.1.1"
