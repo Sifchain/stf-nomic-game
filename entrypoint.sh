@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Reset the database
-psql postgresql://postgres:postgres@nomic-db:5432/nomic -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='nomic';"
-psql postgresql://postgres:postgres@nomic-db:5432/nomic -c "DROP DATABASE IF EXISTS nomic;"
-psql postgresql://postgres:postgres@nomic-db:5432/nomic -c "CREATE DATABASE nomic;"
+psql postgresql://postgres:postgres@nomic-db:5432/postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='nomic';"
+psql postgresql://postgres:postgres@nomic-db:5432/postgres -c "DROP DATABASE IF EXISTS nomic;"
+psql postgresql://postgres:postgres@nomic-db:5432/postgres -c "CREATE DATABASE nomic;"
 
 # Run Alembic migrations
 echo "Running Alembic migrations..."
