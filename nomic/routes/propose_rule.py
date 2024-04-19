@@ -42,7 +42,11 @@ async def propose_rule(
         raise HTTPException(status_code=403, detail="User not part of the game")
 
     rule_proposal = crud.create_rule_proposal(
-        db, game_id, current_user.id, form_data.rule_name, form_data.rule_description
+        db,
+        game_id,
+        str(current_user.id),
+        form_data.rule_name,
+        form_data.rule_description,
     )
 
     # Create the response detail

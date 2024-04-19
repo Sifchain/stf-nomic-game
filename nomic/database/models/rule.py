@@ -1,8 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import (UUID, Boolean, Column, DateTime, ForeignKey, Integer,
-                        Text)
+from sqlalchemy import UUID, Column, DateTime, ForeignKey, Text
 from sqlalchemy.orm import relationship
 
 from nomic.database import Base

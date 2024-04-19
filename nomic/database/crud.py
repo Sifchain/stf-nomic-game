@@ -134,8 +134,8 @@ def vote_rule_proposal(
 def end_turn(db: Session, game: Game) -> Game:
     # Rotate turn to the next player
     players: List[User] = game.players
-    user = get_user_by_id(db, game.turn)
-    current_index = players.index(user)
+    user = get_user_by_id(db, str(game.turn))
+    current_index = players.index(user)  # type: ignore
     next_index = (current_index + 1) % len(players)
     game.turn = players[next_index].id
 

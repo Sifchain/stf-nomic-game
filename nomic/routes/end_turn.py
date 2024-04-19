@@ -1,10 +1,7 @@
-from typing import List
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from nomic.database import crud
-from nomic.database.models.rule import Rule
 from nomic.database.models.user import User
 from nomic.utils.jwt_handler import get_current_user
 

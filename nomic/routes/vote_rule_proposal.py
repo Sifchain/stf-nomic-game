@@ -59,7 +59,7 @@ async def vote_rule_proposal(
             )
 
         rule_proposal = crud.vote_rule_proposal(
-            db, rule_proposal_id, current_user.id, vote_type
+            db, rule_proposal_id, str(current_user.id), vote_type
         )
 
         # Create the response detail
