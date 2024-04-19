@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from typing_extensions import Annotated
 
 from nomic.database import crud
+from nomic.database.models.game_player import GamePlayer
 from nomic.database.models.user import User
 from nomic.routes.ws import broadcast_message
 from nomic.utils.jwt_handler import get_current_user
@@ -38,8 +39,18 @@ async def propose_rule(
     if not game:
         raise HTTPException(status_code=404, detail="Game not found")
 
-    if current_user not in game.players:
+    # Check if the user is part of the game
+    game_player = (
+        db.query(GamePlayer)
+        .filter(GamePlayer.game_id == game.id, GamePlayer.user_id == current_user.id)
+        .first()
+    )
+    if not game_player:
         raise HTTPException(status_code=403, detail="User not part of the game")
+
+    # must be user turn
+    if game.current_player_id != current_user.id:
+        raise HTTPException(status_code=400, detail="Not your turn")
 
     rule_proposal = crud.create_rule_proposal(
         db,

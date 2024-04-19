@@ -13,7 +13,7 @@ from nomic.utils.jwt_handler import get_current_user
 
 class CreateGameInput:
     def __init__(
-        self, game_name: Annotated[str, Form()], initial_rules: Annotated[list, Form()]
+        self, game_name: Annotated[str, Form()], initial_rules: Annotated[str, Form()]
     ):
         self.game_name = game_name
         self.initial_rules = initial_rules
@@ -28,12 +28,15 @@ async def create_game(
     db: Session = Depends(crud.get_db),
     current_user: User = Depends(get_current_user),
 ):
-    game = crud.create_game(db, form_data.game_name, current_user)
+    game = crud.create_game(
+        db, form_data.game_name, form_data.initial_rules, current_user
+    )
 
     game_details = {
         "message": "Game created successfully",
         "game_id": str(game.id),
         "game_name": game.name,
+        "status": game.status,
         "initial_rules": form_data.initial_rules,
         "created_by": str(current_user.id),
     }
@@ -43,8 +46,9 @@ async def create_game(
         json.dumps(
             {
                 "event_type": "create_game",
-                "game_name": form_data.game_name,
                 "game_id": str(game.id),
+                "game_name": form_data.game_name,
+                "status": game.status,
                 "initial_rules": form_data.initial_rules,
                 "created_by": str(current_user.id),
             }

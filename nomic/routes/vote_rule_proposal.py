@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from nomic.database import crud
+from nomic.database.models.game_player import GamePlayer
 from nomic.database.models.rule_proposal import RuleProposal
 from nomic.database.models.rule_proposal_vote import RuleProposalVote
 from nomic.database.models.user import User
@@ -33,7 +34,15 @@ async def vote_rule_proposal(
         if not game:
             raise HTTPException(status_code=404, detail="Game not found")
 
-        if current_user not in game.players:
+        # Check if the user is part of the game
+        game_player = (
+            db.query(GamePlayer)
+            .filter(
+                GamePlayer.game_id == game.id, GamePlayer.user_id == current_user.id
+            )
+            .first()
+        )
+        if not game_player:
             raise HTTPException(status_code=403, detail="User not part of the game")
 
         rule_proposal = db.query(RuleProposal).filter_by(id=rule_proposal_id).first()

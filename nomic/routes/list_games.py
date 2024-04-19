@@ -19,9 +19,18 @@ async def list_games(db: Session = Depends(crud.get_db)):
             "game_name": game.name,
             "status": game.status,
             "players": [
-                {"id": player.id, "name": player.username} for player in game.players
+                {"id": player.user_id, "name": player.user.username}
+                for player in game.players
             ],
-            "turn": str(game.turn),
+            "current_player_id": (
+                str(game.current_player_id)
+                if game.current_player_id
+                else "Game not started yet"
+            ),
+            "current_turn": game.current_turn,
+            "winner_id": (
+                str(game.winner_id) if game.winner_id else "Game not ended yet"
+            ),
             "rules": game.rules,
             "rule_proposals": [
                 {

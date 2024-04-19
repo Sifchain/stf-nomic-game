@@ -11,6 +11,7 @@ from .login import router as login_router
 from .propose_rule import router as propose_rule_router
 from .register import router as register_router
 from .start_game import router as start_game_router
+from .take_action import router as take_action_router
 from .vote_rule_proposal import router as vote_rule_proposal_router
 from .ws import router as ws_router
 
@@ -29,5 +30,6 @@ router.include_router(list_rule_proposals_router)
 router.include_router(propose_rule_router)
 router.include_router(vote_rule_proposal_router)
 router.include_router(end_turn_router)
+router.include_router(take_action_router)
 
 router.include_router(ws_router)
