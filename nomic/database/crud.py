@@ -2,7 +2,9 @@ from contextlib import contextmanager
 from datetime import datetime
 from typing import List, Optional
 
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import text
 
 from nomic.database import SessionLocal, engine
 from nomic.database.models.game import Game
@@ -43,6 +45,13 @@ class DatabaseHandler:
 def get_db():
     db = SessionLocal()
     try:
+        # Attempt to execute a simple SELECT 1 to check if the connection is alive
+        db.execute(text("SELECT 1"))
+        yield db
+    except OperationalError:
+        # If an OperationalError is caught, dispose the current db pool
+        engine.dispose()
+        db = SessionLocal()  # Create a new session after disposing the old one
         yield db
     finally:
         db.close()
