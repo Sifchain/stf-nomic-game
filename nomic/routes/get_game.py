@@ -23,10 +23,16 @@ async def get_game(game_id: str, db: Session = Depends(crud.get_db)):
         "created_at": game.created_at,
         "updated_at": game.updated_at,
         "players": [
-            {"player_id": str(player.id), "username": player.username}
+            {"player_id": str(player.user_id), "username": player.user.username}
             for player in game.players
         ],
-        "turn": str(game.turn) if game.turn else "Game not started yet",
+        "current_player_id": (
+            str(game.current_player_id)
+            if game.current_player_id
+            else "Game not started yet"
+        ),
+        "current_turn": game.current_turn,
+        "winner_id": str(game.winner_id) if game.winner_id else "Game not ended yet",
         "rules": [
             {
                 "rule_id": str(rule.id),

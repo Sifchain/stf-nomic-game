@@ -8,7 +8,7 @@ load_dotenv()
 
 SQLALCHEMY_DATABASE_URL = os.getenv("SQLALCHEMY_DATABASE_URL")
 if not SQLALCHEMY_DATABASE_URL:
-    raise ValueError("DB_URL not found in environment variables")
+    raise ValueError("SQLALCHEMY_DATABASE_URL not found in environment variables")
 
 # For PostgreSQL, the connect_args parameter is not required
 engine = create_engine(SQLALCHEMY_DATABASE_URL)

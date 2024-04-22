@@ -16,7 +16,14 @@ class RuleProposal(Base):
     name = Column(Text)
     description = Column(Text, nullable=True)
     status = Column(
-        Enum("CREATED", "VOTING", "PASSED", "REJECTED", name="rule_proposal_statuses"),
+        Enum(
+            "CREATED",
+            "VOTING",
+            "PASSED",
+            "REJECTED",
+            "CANCELLED",
+            name="rule_proposal_statuses",
+        ),
         default="CREATED",
     )  # type: ignore
     created_at = Column(DateTime, default=datetime.utcnow)
