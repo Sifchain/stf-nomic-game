@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Create database if not exists
+psql postgresql://postgres:postgres@nomic-db:5432/postgres -c "SELECT 1 FROM pg_database WHERE datname='nomic'" | grep -q 1 || psql postgresql://postgres:postgres@nomic-db:5432/postgres -c "CREATE DATABASE nomic;"
+
 # Run Alembic migrations
 echo "Running Alembic migrations..."
 python ./migration.py
