@@ -3,8 +3,6 @@ version: "3.8"
 services:
   nomic-db:
     image: postgres
-    ports:
-      - "5432:5432"
     env_file:
       - ./.env
     environment:
