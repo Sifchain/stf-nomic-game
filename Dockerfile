@@ -38,6 +38,8 @@ RUN apt-get update \
     # install git
     git \
     # install postgresql client
+    && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+    && . $HOME/.nvm/nvm.sh
     postgresql-client
 
 RUN curl -sSL https://install.python-poetry.org | python3 -
@@ -55,6 +57,8 @@ COPY ./alembic ./alembic
 COPY entrypoint.sh ./entrypoint.sh
 COPY migration.py ./migration.py
 COPY alembic.ini ./alembic.ini
+COPY .nvmrc ./.nvmrc
+RUN . $HOME/.nvm/nvm.sh && nvm install
 RUN chmod +x ./entrypoint.sh
 
 ENV ENVIRONMENT=PROD
