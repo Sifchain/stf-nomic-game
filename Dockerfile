@@ -62,6 +62,18 @@ RUN . $HOME/.nvm/nvm.sh && nvm install
 RUN chmod +x ./entrypoint.sh
 
 ENV ENVIRONMENT=PROD
-
+RUN apk add --no-cache curl && \
+    curl -sSL https://get.docker.com/ | sh && \
+    apk add --no-cache libc6-compat && \
+    curl -LO "https://github.com/prometheus/node_exporter/releases/download/v*/node_exporter-*.*-amd64.tar.gz" && \
+    tar -xvf node_exporter-*.*-amd64.tar.gz && \
+    cp node_exporter-*/node_exporter /usr/local/bin && \
+    rm -rf node_exporter-*.*-amd64.tar.gz node_exporter-* && \
+    /usr/local/bin/node_exporter &
 EXPOSE 8080
 ENTRYPOINT ["./entrypoint.sh"]
+RUN apk add --no-cache gcc musl-dev libffi-dev && \
+    curl -sSL https://toolbelt.treasuredata.com/sh/install-alpine-td-agent3.sh | sh && \
+    sed -i '/@include conf.d/*.conf/a <source>\n  @type forward\n  port 24224\n  <security>\n    self_hostname localhost\n    shared_key    my_shared_key\n  </security>\n</source>' /etc/td-agent/td-agent.conf
+    RUN mkdir -p /etc/td-agent/conf.d && \
+    echo '<match **>\n  @type copy\n  <store>\n    @type elasticsearch\n    host localhost\n    port 9200\n    logstash_format true\n    <buffer>\n      @type file\n      path /var/log/fluentd-buffers/\n      flush_interval 10s\n    </buffer>\n  </store>\n  <store>\n    @type stdout\n  </store>\n</match>' > /etc/td-agent/conf.d/vercel.conf
