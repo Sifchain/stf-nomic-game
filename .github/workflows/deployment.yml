@@ -22,7 +22,17 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy
+      - name: Deploy to Staging
+        if: github.ref == 'refs/heads/staging'
+        run: ./deploy-staging.sh
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Deploy to Production
+        if: startsWith(github.ref, 'refs/tags/')
+        run: ./deploy-production.sh
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: ./deploy.sh
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
